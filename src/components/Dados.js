@@ -1,29 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Card, CardContent } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Paper,
+  CircularProgress,
+  Box,
+} from '@mui/material';
 
-export default function Dados() {
+function Dados() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
       .then((res) => res.json())
-      .then((data) => setPost(data));
+      .then((data) => {
+        setPost(data);
+        setLoading(false);
+      });
   }, [id]);
 
-  if (!post) {
-    return <Typography>Carregando...</Typography>;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={5}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
-    <Card sx={{ maxWidth: 600, margin: '20px auto' }}>
-      <CardContent>
-        <Typography variant="h5" gutterBottom>
-          {post.title}
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Detalhes do Post
         </Typography>
-        <Typography variant="body1">{post.body}</Typography>
-      </CardContent>
-    </Card>
+        <Typography variant="h6" color="primary" gutterBottom>
+          Título:
+        </Typography>
+        <Typography paragraph>{post.title}</Typography>
+
+        <Typography variant="h6" color="primary" gutterBottom>
+          Conteúdo:
+        </Typography>
+        <Typography paragraph>{post.body}</Typography>
+      </Paper>
+    </Container>
   );
 }
+
+export default Dados;
