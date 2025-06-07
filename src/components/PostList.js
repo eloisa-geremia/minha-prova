@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function PostList() {
   const [posts, setPosts] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
