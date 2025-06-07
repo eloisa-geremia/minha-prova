@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { List, ListItem, ListItemText, Container, Typography, Paper } from '@mui/material';
 
-export default function PostList() {
+function PostList() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -11,20 +10,31 @@ export default function PostList() {
       .then((data) => setPosts(data));
   }, []);
 
-  function handleClick(id) {
-    // Abre nova aba com rota /dados/:id
+  const handleClick = (id) => {
     window.open(`/dados/${id}`, '_blank');
-  }
+  };
 
   return (
-    <List>
-      {posts.map((post) => (
-        <ListItem key={post.id} disablePadding>
-          <ListItemButton onClick={() => handleClick(post.id)}>
-            <ListItemText primary={post.title} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Lista de Posts
+      </Typography>
+      <Paper elevation={3}>
+        <List>
+          {posts.map((post) => (
+            <ListItem
+              button
+              key={post.id}
+              onClick={() => handleClick(post.id)}
+              divider
+            >
+              <ListItemText primary={post.title} />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Container>
   );
 }
+
+export default PostList;
