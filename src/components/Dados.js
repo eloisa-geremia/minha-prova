@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  Box,
   Container,
   Typography,
   CircularProgress,
@@ -22,17 +23,14 @@ const Dados = () => {
   useEffect(() => {
     const fetchDados = async () => {
       try {
-        // Busca o post
         const resPost = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
         const postData = await resPost.json();
         setPost(postData);
 
-        // Busca o autor
         const resUser = await fetch(`https://jsonplaceholder.typicode.com/users/${postData.userId}`);
         const userData = await resUser.json();
         setAuthor(userData);
 
-        // Busca os comentários
         const resComments = await fetch(`https://jsonplaceholder.typicode.com/comments?postId=${id}`);
         const commentsData = await resComments.json();
         setComments(commentsData);
@@ -56,35 +54,49 @@ const Dados = () => {
   }
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h4" gutterBottom>{post.title}</Typography>
-        <Typography variant="body1" gutterBottom>{post.body}</Typography>
+    <Container sx={{ mt: 5, mb: 5 }}>
+      <Paper elevation={4} sx={{ p: 4, borderRadius: 4, mb: 5 }}>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+          {post.title}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2 }}>
+          {post.body}
+        </Typography>
         {author && (
           <Typography variant="subtitle2" color="text.secondary">
-            Autor: {author.name} ({author.email})
+            Autor: <strong>{author.name}</strong> ({author.email})
           </Typography>
         )}
       </Paper>
 
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>Comentários:</Typography>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 4 }}>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 500 }}>
+          Comentários
+        </Typography>
         <List>
-          {comments.map(comment => (
-            <React.Fragment key={comment.id}>
-              <ListItem alignItems="flex-start">
+          {comments.map((comment, index) => (
+            <Box key={comment.id}>
+              <ListItem alignItems="flex-start" disableGutters sx={{ mb: 2 }}>
                 <ListItemText
-                  primary={comment.name}
+                  primary={
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                      {comment.name}
+                    </Typography>
+                  }
                   secondary={
                     <>
-                      <Typography variant="body2" color="text.primary">{comment.body}</Typography>
-                      <Typography variant="caption" color="text.secondary">— {comment.email}</Typography>
+                      <Typography variant="body2" sx={{ mb: 1 }}>
+                        {comment.body}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        — {comment.email}
+                      </Typography>
                     </>
                   }
                 />
               </ListItem>
-              <Divider component="li" />
-            </React.Fragment>
+              {index < comments.length - 1 && <Divider sx={{ mb: 2 }} />}
+            </Box>
           ))}
         </List>
       </Paper>
