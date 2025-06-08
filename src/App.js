@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/post" replace />} />
+        <Route path="/" element={<Navigate to="/post" />} />
         <Route path="/post" element={<PostList />} />
         <Route path="/dados/:id" element={<Dados />} />
       </Routes>
